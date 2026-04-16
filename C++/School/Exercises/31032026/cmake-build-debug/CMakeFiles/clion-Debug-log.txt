@@ -1,1 +1,0 @@
-CMakeLists.txt not found in D:\Dev\C++\School\Exercises\31032026 Select CMakeLists.txt

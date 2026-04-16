@@ -28,10 +28,9 @@ static void insert(binaryTree *&current_tree, const int insert_num) {
 }
 
 
-void readFromFile(const char *file_name) {
+void readFromFile(const char *file_name, int &num_of_nodes) {
     std::ifstream input_file(file_name);
 
-    int num_of_nodes;
     input_file >> num_of_nodes;
 
     for (int i = 0; i < num_of_nodes; i++) {
@@ -72,13 +71,7 @@ void PreOrder_BST_Console(const binaryTree *current_tree) {
  * @param current_tree  Pointer to the current node being visited.
  *
  */
-void InOrder_BST_Console(const binaryTree *current_tree) {
-    if (current_tree != nullptr) {
-        InOrder_BST_Console(current_tree->left);
-        std::cout << current_tree->root << " ";
-        InOrder_BST_Console(current_tree->right);
-    }
-}
+
 
 /**
  * Prints the BST contents to stdout using post-order traversal (left, right, root).
@@ -106,10 +99,46 @@ void level(const binaryTree *current_tree, const int current_level, const int wr
     }
 }
 
+
+int nodeLevel(const binaryTree *current_tree, const int current_level, const int searched_node) {
+    if (current_tree != nullptr) {
+        if (current_tree->root == searched_node)
+            return current_tree->root;
+        else if (current_tree->root < searched_node)
+            nodeLevel(current_tree->left, current_level + 1, searched_node);
+        else
+            nodeLevel(current_tree->right, current_level + 1, searched_node);
+    }
+
+    return 0;
+}
+
+
+void search (const binaryTree *current_tree, const int searched_node, const int current_level) {
+    if (current_tree != nullptr) {
+        if (current_tree->root == searched_node)
+            std::cout << current_level;
+        else if (current_tree->root < searched_node)
+            search(current_tree->right, searched_node, current_level);
+        else
+            search(current_tree->left, searched_node, current_level);
+    }
+}
+
+void InOrder_BST_Console(const binaryTree *current_tree) {
+    if (current_tree != nullptr) {
+        InOrder_BST_Console(current_tree->left);
+        std::cout << current_tree->root << " ";
+        search(binary_search_tree, current_tree->root, 1); std::cout << std::endl;
+        InOrder_BST_Console(current_tree->right);
+    }
+}
+
 int main() {
     const auto file_name {"tree.in"};
 
-    readFromFile(file_name);
+    int num_of_nodes;
+    readFromFile(file_name, num_of_nodes);
 
     std::cout << "Preorder:\n";
     PreOrder_BST_Console(binary_search_tree);      // Print the BST in pre-order
